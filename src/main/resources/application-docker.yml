@@ -1,0 +1,41 @@
+server:
+port: 8080
+
+spring:
+  application:
+    name: test-task
+  sql:
+    init:
+      mode: never
+
+database-properties:
+  datasources:
+    -
+      name: data-base-1
+      strategy: postgres
+      url: jdbc:postgresql://postgres1:5432/db1
+      table: users
+      user: user1
+      password: pass1
+      mapping:
+        id: user_id
+        username: login
+        name: first_name
+        surname: last_name
+    -
+      name: data-base-2
+      strategy: postgres
+      url: jdbc:postgresql://postgres2:5432/db2
+      table: user_table
+      user: user2
+      password: pass2
+      mapping:
+        id: ldap_login
+        username: ldap_login
+        name: name
+        surname: surname
+
+
+logging:
+  level:
+    root: DEBUG

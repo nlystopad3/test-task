@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    ports:
+      - "8080:8080"
+    container_name: app
+    environment:
+      - "SPRING_PROFILES_ACTIVE=docker"
+    depends_on:
+      - postgres1
+      - postgres2
+    networks:
+      - app-network
+
+  postgres1:
+    image: postgres:15
+    container_name: postgres1
+    environment:
+      POSTGRES_USER: user1
+      POSTGRES_PASSWORD: pass1
+      POSTGRES_DB: db1
+    ports:
+      - "5433:5432"
+    networks:
+      - app-network
+    volumes:
+      - ./sql/postgres1/create_table.sql:/docker-entrypoint-initdb.d/create_tables.sql
+
+  postgres2:
+    image: postgres:15
+    container_name: postgres2
+    environment:
+      POSTGRES_USER: user2
+      POSTGRES_PASSWORD: pass2
+      POSTGRES_DB: db2
+    ports:
+      - "5434:5432"
+    networks:
+      - app-network
+    volumes:
+      - ./sql/postgres2/create_table.sql:/docker-entrypoint-initdb.d/create_tables.sql
+
+networks:
+  app-network:
+    driver: bridge
